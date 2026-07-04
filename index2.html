@@ -1,0 +1,2695 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инспектор сайта ОО — Приказ № 831</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f1f5f9;
+            --surface: rgba(255, 255, 255, 0.85);
+            --surface-solid: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: rgba(148, 163, 184, 0.3);
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+            --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 20px 60px rgba(15, 23, 42, 0.12);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark {
+            --bg: #0a0e27;
+            --surface: rgba(30, 41, 59, 0.7);
+            --surface-solid: #1e293b;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: rgba(148, 163, 184, 0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            transition: background 0.5s, color 0.5s;
+        }
+
+        .bg-animated {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: blobFloat 20s ease-in-out infinite;
+        }
+
+        .bg-blob:nth-child(1) {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            top: -10%;
+            left: -10%;
+        }
+
+        .bg-blob:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #10b981, #3b82f6);
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -7s;
+        }
+
+        .bg-blob:nth-child(3) {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #f59e0b, #ec4899);
+            top: 40%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+
+        body.dark .bg-blob {
+            opacity: 0.25;
+        }
+
+        @keyframes blobFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.95); }
+        }
+
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--surface);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            50%, 100% { transform: translateX(100%); }
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-badge {
+            font-size: 0.65rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-icon {
+            background: var(--surface-solid);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.6rem 0.9rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: inherit;
+        }
+
+        .btn-icon:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeUp 0.8s ease;
+        }
+
+        .hero-title {
+            font-size: clamp(1.75rem, 4vw, 2.75rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-card {
+            background: var(--surface);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.75rem;
+            transition: var(--transition);
+        }
+
+        .glass-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .input-section {
+            margin-bottom: 2rem;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .input-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1.1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 1rem 2.8rem 1rem 3rem;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            font-size: 1rem;
+            background: var(--surface-solid);
+            color: var(--text);
+            outline: none;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .url-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        .url-input.valid { border-color: var(--success); }
+        .url-input.invalid { border-color: var(--danger); }
+
+        .url-validation-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: var(--transition);
+            pointer-events: none;
+        }
+
+        .url-validation-icon.visible { opacity: 1; }
+
+        .btn {
+            padding: 1rem 1.75rem;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--accent), #be185d);
+            color: white;
+            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
+        }
+
+        .status-message {
+            margin-top: 0.875rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 1.5rem;
+        }
+
+        .result-section {
+            display: none;
+            animation: fadeUp 0.6s ease;
+        }
+
+        .result-section.visible { display: block; }
+
+        .summary-card {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 2rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-ring {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
+
+        .progress-ring svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .progress-ring-bg { fill: none; stroke: var(--border); stroke-width: 10; }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: url(#progressGradient);
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke-dasharray: 339.292;
+            stroke-dashoffset: 339.292;
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-ring-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-ring-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            line-height: 1;
+        }
+
+        .progress-ring-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.25rem;
+        }
+
+        .summary-info h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-info p { color: var(--text-muted); font-size: 0.95rem; }
+
+        .summary-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            background: var(--surface-solid);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .export-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+        .btn-export, .btn-share, .btn-pdf {
+            border: none;
+            padding: 0.6rem 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: inherit;
+            color: white;
+        }
+
+        .btn-export { background: linear-gradient(135deg, var(--success), #059669); }
+        .btn-share { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .btn-pdf { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+
+        .btn-export:hover, .btn-share:hover, .btn-pdf:hover {
+            transform: translateY(-2px);
+        }
+
+        .comparison-card {
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(236, 72, 153, 0.05));
+            border: 1px dashed var(--primary);
+        }
+
+        .comparison-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .comparison-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .comparison-item {
+            background: var(--surface-solid);
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .comparison-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-value { font-size: 1.5rem; font-weight: 800; }
+
+        .comparison-delta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+        }
+
+        .delta-positive { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .delta-negative { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .delta-neutral { background: rgba(100, 116, 139, 0.1); color: var(--text-muted); }
+
+        .radar-card { margin-bottom: 1.5rem; }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-header-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .card-header-title { font-weight: 700; font-size: 1.1rem; }
+
+        .card-header-badge {
+            margin-left: auto;
+            font-size: 0.75rem;
+            background: var(--surface-solid);
+            color: var(--text-muted);
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        .radar-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .radar-svg { max-width: 100%; height: auto; }
+        .radar-axis { stroke: var(--border); stroke-width: 1; fill: none; }
+        .radar-axis-line { stroke: var(--border); stroke-width: 1; stroke-dasharray: 2, 4; }
+
+        .radar-area {
+            fill: url(#radarGradient);
+            stroke: var(--primary);
+            stroke-width: 2;
+            opacity: 0.7;
+            transition: all 0.6s ease;
+        }
+
+        .radar-point {
+            fill: var(--primary);
+            stroke: white;
+            stroke-width: 2;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), fill 0.3s ease, filter 0.3s ease;
+            cursor: pointer;
+            transform-origin: center;
+            transform-box: fill-box;
+        }
+
+        .radar-point:hover {
+            fill: var(--accent);
+            transform: scale(1.6);
+            filter: drop-shadow(0 0 6px rgba(236, 72, 153, 0.5));
+        }
+
+        .radar-label {
+            fill: var(--text);
+            font-size: 11px;
+            font-weight: 500;
+            text-anchor: middle;
+            pointer-events: none;
+        }
+
+        .subsection-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .subsection-item {
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-sm);
+            background: var(--surface-solid);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subsection-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--border);
+            transition: var(--transition);
+        }
+
+        .subsection-item.found::before { background: linear-gradient(180deg, var(--success), #059669); }
+        .subsection-item.not-found::before { background: linear-gradient(180deg, var(--danger), #b91c1c); }
+        .subsection-item.partial::before { background: linear-gradient(180deg, var(--warning), #d97706); }
+
+        .subsection-item:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+            border-color: var(--primary);
+        }
+
+        .subsection-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .subsection-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            background: var(--bg);
+        }
+
+        .subsection-item.found .subsection-icon { background: rgba(16, 185, 129, 0.1); }
+        .subsection-item.not-found .subsection-icon { background: rgba(239, 68, 68, 0.1); }
+        .subsection-item.partial .subsection-icon { background: rgba(245, 158, 11, 0.1); }
+
+        .subsection-name { font-weight: 600; font-size: 0.95rem; flex: 1; min-width: 0; }
+
+        .subsection-comment {
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .status-found { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .status-not-found { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .status-partial { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+
+        .recommendations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .recommendation-item {
+            padding: 1.1rem 1.25rem;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid;
+            transition: var(--transition);
+        }
+
+        .recommendation-item:hover {
+            transform: translateX(6px) scale(1.01);
+            box-shadow: var(--shadow);
+        }
+
+        .rec-critical { background: rgba(239, 68, 68, 0.06); border-color: var(--danger); }
+        .rec-error { background: rgba(249, 115, 22, 0.06); border-color: #f97316; }
+        .rec-warning { background: rgba(245, 158, 11, 0.06); border-color: var(--warning); }
+        .rec-success { background: rgba(16, 185, 129, 0.06); border-color: var(--success); }
+
+        body.dark .rec-critical { background: rgba(239, 68, 68, 0.1); }
+        body.dark .rec-error { background: rgba(249, 115, 22, 0.1); }
+        body.dark .rec-warning { background: rgba(245, 158, 11, 0.1); }
+        body.dark .rec-success { background: rgba(16, 185, 129, 0.1); }
+
+        .rec-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .rec-icon { font-size: 1.5rem; animation: recPulse 2s ease-in-out infinite; }
+
+        @keyframes recPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .rec-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .rec-description { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+
+        .rec-tips { list-style: none; margin-top: 0.75rem; display: none; }
+        .rec-tips.expanded { display: block; animation: fadeUp 0.3s ease; }
+
+        .rec-tips li {
+            font-size: 0.85rem;
+            padding: 0.4rem 0 0.4rem 1.5rem;
+            position: relative;
+            color: var(--text);
+        }
+
+        .rec-tips li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .rec-toggle {
+            font-size: 0.75rem;
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.25rem;
+        }
+
+        .details-card { margin-bottom: 1.5rem; }
+
+        .details-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .details-toggle {
+            margin-left: auto;
+            transition: transform 0.4s;
+            font-size: 0.9rem;
+        }
+
+        .details-toggle.open { transform: rotate(180deg); }
+
+        .details-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .details-content.open { max-height: 1000px; }
+        .details-body { padding-top: 1rem; }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed var(--border);
+            gap: 1rem;
+        }
+
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { color: var(--text-muted); font-size: 0.9rem; }
+        .detail-value { font-weight: 600; font-size: 0.9rem; text-align: right; }
+
+        .history-card { margin-top: 2rem; }
+
+        .history-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .history-filter {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .history-filter select {
+            padding: 0.5rem 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface-solid);
+            color: var(--text);
+            font-size: 0.85rem;
+            outline: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 0.9rem 1.1rem;
+            border-radius: var(--radius-sm);
+            background: var(--surface-solid);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            transition: var(--transition);
+        }
+
+        .history-item:hover {
+            transform: translateX(4px);
+            border-color: var(--primary);
+        }
+
+        .history-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .history-status { font-size: 1.2rem; }
+
+        .history-url {
+            font-weight: 600;
+            font-size: 0.9rem;
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .history-badge {
+            font-size: 0.7rem;
+            background: var(--bg);
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+
+        .history-time { font-size: 0.8rem; color: var(--text-muted); }
+
+        .history-empty {
+            padding: 3rem 1.5rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.visible { display: flex; }
+
+        .modal {
+            background: var(--surface-solid);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .scanner {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.25rem;
+            position: relative;
+        }
+
+        .scanner-ring {
+            position: absolute;
+            inset: 0;
+            border: 3px solid transparent;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .scanner-ring:nth-child(2) {
+            inset: 8px;
+            border-top-color: var(--accent);
+            animation-duration: 1.5s;
+            animation-direction: reverse;
+        }
+
+        .scanner-ring:nth-child(3) {
+            inset: 16px;
+            border-top-color: var(--success);
+            animation-duration: 2s;
+        }
+
+        .scanner-core {
+            position: absolute;
+            inset: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .modal-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .modal-sub { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 3px;
+            transition: width 0.3s;
+            width: 0%;
+        }
+
+        .loading-steps {
+            display: flex;
+            justify-content: center;
+            gap: 0.6rem;
+            margin: 1.25rem 0;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            opacity: 0.4;
+            transition: var(--transition);
+        }
+
+        .step-icon.active {
+            opacity: 1;
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+            transform: scale(1.15);
+        }
+
+        .step-icon.done {
+            opacity: 0.8;
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 5rem;
+            right: 1.5rem;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--surface-solid);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.875rem 1.25rem;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 280px;
+            animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: auto;
+        }
+
+        .toast.removing { animation: toastOut 0.3s ease forwards; }
+
+        @keyframes toastIn {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes toastOut {
+            to { transform: translateX(120%); opacity: 0; }
+        }
+
+        .toast-icon { font-size: 1.3rem; }
+        .toast-message { font-size: 0.875rem; font-weight: 500; }
+
+        .confetti-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1500;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            padding: 1.25rem 1.5rem;
+            margin-top: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            main { padding: 1.25rem 1rem; }
+            .input-row { flex-direction: column; }
+            .summary-card { grid-template-columns: 1fr; text-align: center; }
+            .progress-ring { margin: 0 auto; }
+            .summary-actions { align-items: center; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .export-row { justify-content: center; }
+            .subsection-item { flex-direction: column; align-items: flex-start; }
+            .history-item { flex-direction: column; align-items: flex-start; }
+            .comparison-grid { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            body { background: white !important; color: black !important; }
+            .bg-animated, .bg-grid, .confetti-canvas, header, footer, .input-section, .history-card, .toast-container, .modal-overlay { display: none !important; }
+            .glass-card { background: white !important; box-shadow: none !important; border: 1px solid #ddd !important; }
+            .result-section { display: block !important; }
+            .btn-export, .btn-share, .btn-pdf { display: none !important; }
+            .rec-tips { display: block !important; }
+            .details-content { max-height: none !important; }
+            @page { margin: 2cm; size: A4; }
+        }
+
+        button:focus-visible, input:focus-visible, select:focus-visible, [role="button"]:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-animated" aria-hidden="true">
+        <div class="bg-blob"></div>
+        <div class="bg-blob"></div>
+        <div class="bg-blob"></div>
+    </div>
+    <div class="bg-grid" aria-hidden="true"></div>
+
+    <header role="banner">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon" aria-hidden="true">🏫</div>
+                <div>
+                    <span class="logo-text">Инспектор сайта ОО</span>
+                    <span class="logo-badge">MVP</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-icon" id="clearHistoryBtn" title="Очистить историю">🗑️ <span>Очистить</span></button>
+                <button class="btn-icon" id="toggleThemeBtn" title="Переключить тему">🌙 <span>Тема</span></button>
+            </div>
+        </div>
+    </header>
+
+    <main id="mainContent" role="main">
+        <section class="hero-section">
+            <h1 class="hero-title">Аудит сайта образовательной организации</h1>
+            <p class="hero-subtitle">Автоматическая проверка соответствия Приказу № 831 • 11 обязательных подразделов</p>
+        </section>
+
+        <section class="glass-card input-section">
+            <div class="input-row">
+                <div class="input-wrapper">
+                    <span class="input-icon" aria-hidden="true">🔗</span>
+                    <input type="url" id="urlInput" class="url-input" placeholder="https://example.edu.ru"
+                        aria-label="URL сайта">
+                    <span class="url-validation-icon" id="urlValidationIcon" aria-hidden="true"></span>
+                </div>
+                <button class="btn btn-primary" id="checkBtn">🔍 <span>Проверить</span></button>
+                <button class="btn btn-secondary" id="demoBtn">⚡ <span>Демо</span></button>
+            </div>
+            <div class="status-message" id="statusMessage" role="status" aria-live="polite">
+                <span aria-hidden="true">ℹ️</span>
+                <span>Введите адрес сайта для проверки соответствия Приказу № 831</span>
+            </div>
+        </section>
+
+        <section class="result-section" id="resultSection" aria-live="polite">
+            <article class="glass-card summary-card">
+                <div class="progress-ring" role="img" aria-label="Прогресс проверки">
+                    <svg viewBox="0 0 120 120" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#6366f1" />
+                                <stop offset="100%" stop-color="#ec4899" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="progress-ring-bg" cx="60" cy="60" r="54" />
+                        <circle class="progress-ring-fill" id="progressRingFill" cx="60" cy="60" r="54" />
+                    </svg>
+                    <div class="progress-ring-text">
+                        <div class="progress-ring-value" id="progressValue">0%</div>
+                        <div class="progress-ring-label">соответствие</div>
+                    </div>
+                </div>
+                <div class="summary-info">
+                    <h2 id="summaryTitle">Статус проверки</h2>
+                    <p id="statusSub">Найдено подразделов: 0 из 11</p>
+                </div>
+                <div class="summary-actions">
+                    <span class="badge" id="visionBadge">
+                        👁️ <span>Версия для слабовидящих: —</span>
+                    </span>
+                    <div class="export-row">
+                        <button class="btn-export" id="exportJsonBtn">📄 <span>JSON</span></button>
+                        <button class="btn-pdf" id="exportPdfBtn">📑 <span>PDF</span></button>
+                        <button class="btn-share" id="shareBtn">🔗 <span>Поделиться</span></button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="glass-card comparison-card" id="comparisonCard" style="display: none;">
+                <div class="comparison-header">
+                    <div class="comparison-icon" aria-hidden="true">📈</div>
+                    <div>
+                        <h3 class="card-header-title">Сравнение с предыдущей проверкой</h3>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);" id="comparisonDate"></p>
+                    </div>
+                </div>
+                <div class="comparison-grid" id="comparisonGrid"></div>
+            </article>
+
+            <article class="glass-card radar-card">
+                <div class="card-header">
+                    <div class="card-header-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">🕸️</div>
+                    <h3 class="card-header-title">Карта соответствия</h3>
+                    <span class="card-header-badge" id="radarBadge">11 параметров</span>
+                </div>
+                <div class="radar-container">
+                    <svg class="radar-svg" id="radarChart" viewBox="0 0 400 400" width="400" height="400">
+                        <defs>
+                            <linearGradient id="radarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#6366f1" stop-opacity="0.4" />
+                                <stop offset="100%" stop-color="#ec4899" stop-opacity="0.4" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </article>
+
+            <article class="glass-card details-card">
+                <div class="details-header" id="detailsToggle" role="button" tabindex="0" aria-expanded="false">
+                    <div class="card-header-icon" style="background: linear-gradient(135deg, #10b981, #059669);">📊</div>
+                    <h3 class="card-header-title">Детальная информация</h3>
+                    <span class="details-toggle" id="detailsArrow">▼</span>
+                </div>
+                <div class="details-content" id="detailsContent">
+                    <div class="details-body" id="detailsBody"></div>
+                </div>
+            </article>
+
+            <article class="glass-card">
+                <div class="card-header">
+                    <div class="card-header-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">📋</div>
+                    <h3 class="card-header-title">Проверка подразделов</h3>
+                    <span class="card-header-badge">обязательные 11</span>
+                </div>
+                <ul class="subsection-list" id="subsectionsList"></ul>
+            </article>
+
+            <article class="glass-card" style="margin-top: 1.5rem;">
+                <div class="card-header">
+                    <div class="card-header-icon" style="background: linear-gradient(135deg, #ec4899, #be185d);">💡</div>
+                    <h3 class="card-header-title">Рекомендации по улучшению</h3>
+                    <span class="card-header-badge" id="recCount">0</span>
+                </div>
+                <div class="recommendations-list" id="recommendationsList"></div>
+            </article>
+        </section>
+
+        <section class="glass-card history-card">
+            <div class="history-header">
+                <div class="card-header-icon" style="background: linear-gradient(135deg, #64748b, #475569);">🕒</div>
+                <h3 class="card-header-title">История проверок</h3>
+                <span class="card-header-badge" id="historyCount">0</span>
+                <div class="history-filter">
+                    <label for="historyFilter">Фильтр:</label>
+                    <select id="historyFilter">
+                        <option value="all">Все</option>
+                        <option value="✅">Соответствует</option>
+                        <option value="⚠️">Частично</option>
+                        <option value="❌">Не соответствует</option>
+                    </select>
+                </div>
+            </div>
+            <div class="history-list" id="historyList"></div>
+            <div class="history-empty" id="historyEmpty">
+                <div style="font-size: 3rem; opacity: 0.3; margin-bottom: 0.75rem;">📭</div>
+                <p>История пуста</p>
+            </div>
+        </section>
+    </main>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+    <canvas class="confetti-canvas" id="confettiCanvas" aria-hidden="true"></canvas>
+
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <span>© 2026 Инспектор сайта ОО • ОбрНадзор.Тех</span>
+            <span>Приказ № 831 • ❤️ для образования</span>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="loadingModal" role="dialog" aria-modal="true">
+        <div class="modal">
+            <div class="scanner" aria-hidden="true">
+                <div class="scanner-ring"></div>
+                <div class="scanner-ring"></div>
+                <div class="scanner-ring"></div>
+                <div class="scanner-core">🔍</div>
+            </div>
+            <h3 class="modal-title" id="loadingTitle">Сканирование сайта...</h3>
+            <p class="modal-sub" id="loadingSub">Анализируем структуру</p>
+            <div class="loading-steps" aria-hidden="true">
+                <div class="step-icon" data-step="0">🌐</div>
+                <div class="step-icon" data-step="1">📡</div>
+                <div class="step-icon" data-step="2">🔍</div>
+                <div class="step-icon" data-step="3">📊</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /*
+         * ИНСПЕКТОР САЙТА ОО — Проверка соответствия Приказу № 831
+         * Исправленная версия: конфетти, детали, подразделы, рекомендации
+         */
+
+        (function () {
+            'use strict';
+
+            const REQUIRED_SUBSECTIONS = [
+                'Основные сведения',
+                'Структура и органы управления образовательной организацией',
+                'Документы',
+                'Образование',
+                'Руководство. Педагогический (научно-педагогический) состав',
+                'Материально-техническое обеспечение и оснащенность образовательного процесса',
+                'Платные образовательные услуги',
+                'Финансово-хозяйственная деятельность',
+                'Вакантные места для приема (перевода) обучающихся',
+                'Доступная среда',
+                'Международное сотрудничество'
+            ];
+
+            const SUBSECTION_ICONS = {
+                'Основные сведения': '📌',
+                'Структура и органы управления образовательной организацией': '🏛️',
+                'Документы': '📄',
+                'Образование': '🎓',
+                'Руководство. Педагогический (научно-педагогический) состав': '👨‍🏫',
+                'Материально-техническое обеспечение и оснащенность образовательного процесса': '🔧',
+                'Платные образовательные услуги': '💰',
+                'Финансово-хозяйственная деятельность': '💵',
+                'Вакантные места для приема (перевода) обучающихся': '🎯',
+                'Доступная среда': '♿',
+                'Международное сотрудничество': '🌍'
+            };
+
+            const SUBSECTION_ALIASES = {
+                'Основные сведения': ['основные сведения', 'общая информация', 'о колледже', 'о школе', 'сведения'],
+                'Структура и органы управления образовательной организацией': ['структура', 'органы управления', 'управление'],
+                'Документы': ['документы', 'локальные акты', 'нормативные документы', 'устав', 'документация'],
+                'Образование': ['образование', 'образовательные программы', 'учебный план'],
+                'Руководство. Педагогический (научно-педагогический) состав': ['руководство', 'педагогический состав', 'преподаватели', 'педагоги'],
+                'Материально-техническое обеспечение и оснащенность образовательного процесса': ['материально-техническое', 'оснащенность', 'материальная база', 'оборудование'],
+                'Платные образовательные услуги': ['платные услуги', 'платное образование', 'стоимость'],
+                'Финансово-хозяйственная деятельность': ['финансово-хозяйственная', 'финансовая', 'хозяйственная', 'финансы', 'бюджет', 'план финансово'],
+                'Вакантные места для приема (перевода) обучающихся': ['вакантные места', 'прием', 'перевод', 'поступление', 'абитуриент'],
+                'Доступная среда': ['доступная среда', 'инклюзивная', 'безбарьерная', 'для инвалидов'],
+                'Международное сотрудничество': ['международное', 'международные связи', 'зарубежные']
+            };
+
+            const RECOMMENDATIONS_DETAILS = {
+                'Основные сведения': {
+                    title: 'Основные сведения',
+                    tips: [
+                        'Разместите полное и сокращённое наименование организации',
+                        'Укажите дату создания и учредителя',
+                        'Добавьте контакты: телефон, email, адрес',
+                        'Разместите режим и график работы',
+                        'Укажите место нахождения (юридический адрес)'
+                    ]
+                },
+                'Структура и органы управления образовательной организацией': {
+                    title: 'Структура и органы управления',
+                    tips: [
+                        'Опишите организационную структуру',
+                        'Укажите руководителей подразделений',
+                        'Добавьте схему управления',
+                        'Разместите положения об органах управления',
+                        'Укажите адреса страниц структурных подразделений'
+                    ]
+                },
+                'Документы': {
+                    title: 'Документы',
+                    tips: [
+                        'Разместите устав с актуальной датой',
+                        'Добавьте лицензию на образовательную деятельность',
+                        'Укажите свидетельство об аккредитации',
+                        'Разместите локальные нормативные акты',
+                        'Обеспечьте доступ к документам в PDF/DOC'
+                    ]
+                },
+                'Образование': {
+                    title: 'Образование',
+                    tips: [
+                        'Опишите образовательные программы',
+                        'Укажите сроки и формы обучения',
+                        'Разместите учебные планы',
+                        'Добавьте информацию о численности обучающихся',
+                        'Укажите языки обучения'
+                    ]
+                },
+                'Руководство. Педагогический (научно-педагогический) состав': {
+                    title: 'Руководство и педагогический состав',
+                    tips: [
+                        'Разместите информацию о руководителе',
+                        'Укажите всех педагогических работников',
+                        'Добавьте данные об образовании педагогов',
+                        'Разместите сведения о повышении квалификации',
+                        'Укажите общий стаж работы коллектива'
+                    ]
+                },
+                'Материально-техническое обеспечение и оснащенность образовательного процесса': {
+                    title: 'Материально-техническое обеспечение',
+                    tips: [
+                        'Опишите учебные кабинеты и лаборатории',
+                        'Укажите наличие библиотеки',
+                        'Добавьте информацию о спортивных объектах',
+                        'Разместите сведения о компьютерной технике',
+                        'Укажите наличие общежития'
+                    ]
+                },
+                'Платные образовательные услуги': {
+                    title: 'Платные образовательные услуги',
+                    tips: [
+                        'Укажите перечень платных услуг',
+                        'Разместите стоимость',
+                        'Добавьте образец договора',
+                        'Укажите порядок оказания услуг',
+                        'Разместите реквизиты для оплаты'
+                    ]
+                },
+                'Финансово-хозяйственная деятельность': {
+                    title: 'Финансово-хозяйственная деятельность',
+                    tips: [
+                        'Разместите информацию об объёме средств',
+                        'Укажите источники финансирования',
+                        'Добавьте годовой отчёт',
+                        'Разместите план ФХД',
+                        'Укажите контрольные органы'
+                    ]
+                },
+                'Вакантные места для приема (перевода) обучающихся': {
+                    title: 'Вакантные места',
+                    tips: [
+                        'Укажите количество вакантных мест',
+                        'Разместите порядок зачисления',
+                        'Добавьте сроки приёма',
+                        'Укажите места по договорам',
+                        'Разместите информацию о переводе'
+                    ]
+                },
+                'Доступная среда': {
+                    title: 'Доступная среда',
+                    tips: [
+                        'Опишите условия для инвалидов',
+                        'Укажите наличие пандусов',
+                        'Добавьте информацию о технических средствах',
+                        'Разместите адаптированные программы',
+                        'Укажите наличие тифлоприборов'
+                    ]
+                },
+                'Международное сотрудничество': {
+                    title: 'Международное сотрудничество',
+                    tips: [
+                        'Укажите договора с международными организациями',
+                        'Опишите программы обмена',
+                        'Добавьте информацию о партнёрах',
+                        'Разместите сведения о зарубежных проектах',
+                        'Укажите количество иностранных обучающихся'
+                    ]
+                }
+            };
+
+            let currentReport = null;
+            let history = [];
+            let darkMode = false;
+            let radarStructureInitialized = false;
+
+            try {
+                const saved = localStorage.getItem('inspectorHistory');
+                if (saved) history = JSON.parse(saved);
+            } catch (e) { history = []; }
+
+            // DOM элементы
+            const urlInput = document.getElementById('urlInput');
+            const urlValidationIcon = document.getElementById('urlValidationIcon');
+            const checkBtn = document.getElementById('checkBtn');
+            const demoBtn = document.getElementById('demoBtn');
+            const statusMessage = document.getElementById('statusMessage');
+            const resultSection = document.getElementById('resultSection');
+            const summaryTitle = document.getElementById('summaryTitle');
+            const statusSub = document.getElementById('statusSub');
+            const visionBadge = document.getElementById('visionBadge');
+            const progressRingFill = document.getElementById('progressRingFill');
+            const progressValue = document.getElementById('progressValue');
+            const subsectionsList = document.getElementById('subsectionsList');
+            const recommendationsList = document.getElementById('recommendationsList');
+            const recCount = document.getElementById('recCount');
+            const historyList = document.getElementById('historyList');
+            const historyEmpty = document.getElementById('historyEmpty');
+            const historyCount = document.getElementById('historyCount');
+            const historyFilter = document.getElementById('historyFilter');
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+            const exportJsonBtn = document.getElementById('exportJsonBtn');
+            const exportPdfBtn = document.getElementById('exportPdfBtn');
+            const shareBtn = document.getElementById('shareBtn');
+            const toggleThemeBtn = document.getElementById('toggleThemeBtn');
+            const loadingModal = document.getElementById('loadingModal');
+            const loadingTitle = document.getElementById('loadingTitle');
+            const progressFill = document.getElementById('progressFill');
+            const detailsToggle = document.getElementById('detailsToggle');
+            const detailsContent = document.getElementById('detailsContent');
+            const detailsArrow = document.getElementById('detailsArrow');
+            const detailsBody = document.getElementById('detailsBody');
+            const radarChart = document.getElementById('radarChart');
+            const radarBadge = document.getElementById('radarBadge');
+            const toastContainer = document.getElementById('toastContainer');
+            const confettiCanvas = document.getElementById('confettiCanvas');
+            const comparisonCard = document.getElementById('comparisonCard');
+            const comparisonDate = document.getElementById('comparisonDate');
+            const comparisonGrid = document.getElementById('comparisonGrid');
+
+            function clearElement(el) {
+                if (!el) return;
+                while (el.firstChild) el.removeChild(el.firstChild);
+            }
+
+            function getStatusText(count) {
+                if (count === 11) return { text: '✅ Полное соответствие', icon: '✅' };
+                if (count >= 7) return { text: '⚠️ Частично соответствует', icon: '⚠️' };
+                return { text: '❌ Не соответствует', icon: '❌' };
+            }
+
+            function showToast(message, icon) {
+                icon = icon || 'ℹ️';
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+
+                const iconEl = document.createElement('span');
+                iconEl.className = 'toast-icon';
+                iconEl.textContent = icon;
+
+                const msgEl = document.createElement('span');
+                msgEl.className = 'toast-message';
+                msgEl.textContent = message;
+
+                toast.appendChild(iconEl);
+                toast.appendChild(msgEl);
+                toastContainer.appendChild(toast);
+
+                setTimeout(function () {
+                    toast.classList.add('removing');
+                    setTimeout(function () {
+                        if (toast.parentNode) toast.parentNode.removeChild(toast);
+                    }, 300);
+                }, 3000);
+            }
+
+            function validateUrlRealtime(value) {
+                const trimmed = value.trim();
+                if (trimmed === '') {
+                    urlInput.classList.remove('valid', 'invalid');
+                    urlValidationIcon.classList.remove('visible');
+                    urlValidationIcon.textContent = '';
+                    return;
+                }
+                try {
+                    new URL(trimmed);
+                    urlInput.classList.remove('invalid');
+                    urlInput.classList.add('valid');
+                    urlValidationIcon.textContent = '✅';
+                    urlValidationIcon.classList.add('visible');
+                } catch (e) {
+                    urlInput.classList.remove('valid');
+                    urlInput.classList.add('invalid');
+                    urlValidationIcon.textContent = '❌';
+                    urlValidationIcon.classList.add('visible');
+                }
+            }
+
+            async function shareResult() {
+                if (!currentReport) {
+                    showToast('Нет данных для публикации', '⚠️');
+                    return;
+                }
+                const shareText = 'Проверка сайта ' + currentReport.url + '\n' +
+                    'Статус: ' + currentReport.status.text + '\n' +
+                    'Найдено подразделов: ' + currentReport.foundCount + ' из 11\n' +
+                    'Дата: ' + currentReport.timestamp;
+
+                if (navigator.share) {
+                    try {
+                        await navigator.share({ title: 'Результат проверки', text: shareText });
+                        showToast('Результат отправлен', '✅');
+                    } catch (err) {
+                        if (err.name !== 'AbortError') copyToClipboard(shareText);
+                    }
+                } else {
+                    copyToClipboard(shareText);
+                }
+            }
+
+            function copyToClipboard(text) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(function () {
+                        showToast('Скопировано в буфер обмена', '📋');
+                    }).catch(function () {
+                        fallbackCopy(text);
+                    });
+                } else {
+                    fallbackCopy(text);
+                }
+            }
+
+            function fallbackCopy(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('Скопировано в буфер обмена', '📋');
+                } catch (err) {
+                    showToast('Не удалось скопировать', '❌');
+                }
+                document.body.removeChild(textarea);
+            }
+
+            function findPreviousCheck(url) {
+                for (let i = 1; i < history.length; i++) {
+                    if (history[i].url === url) return history[i];
+                }
+                return null;
+            }
+
+            function renderComparison(currentReport, previousReport) {
+                if (!previousReport) {
+                    comparisonCard.style.display = 'none';
+                    return;
+                }
+                comparisonCard.style.display = 'block';
+                comparisonDate.textContent = 'Предыдущая проверка: ' + previousReport.timestamp;
+                clearElement(comparisonGrid);
+
+                const metrics = [
+                    { label: 'Найдено подразделов', current: currentReport.foundCount, previous: previousReport.foundCount, suffix: '/11' },
+                    { label: 'Версия для слабовидящих', current: currentReport.visionFound ? 1 : 0, previous: previousReport.visionFound ? 1 : 0, format: function (v) { return v ? '✅' : '❌'; } },
+                    { label: 'Основной раздел', current: currentReport.sectionFound ? 1 : 0, previous: previousReport.sectionFound ? 1 : 0, format: function (v) { return v ? '✅' : '❌'; } }
+                ];
+
+                metrics.forEach(function (metric) {
+                    const item = document.createElement('div');
+                    item.className = 'comparison-item';
+
+                    const label = document.createElement('div');
+                    label.className = 'comparison-label';
+                    label.textContent = metric.label;
+
+                    const value = document.createElement('div');
+                    value.className = 'comparison-value';
+                    const currentFormatted = metric.format ? metric.format(metric.current) : metric.current;
+                    value.textContent = currentFormatted + (metric.suffix || '');
+
+                    const delta = document.createElement('div');
+                    const diff = metric.current - metric.previous;
+                    let deltaClass = 'delta-neutral';
+                    let deltaText = '— без изменений';
+
+                    if (diff > 0) { deltaClass = 'delta-positive'; deltaText = '↑ +' + diff; }
+                    else if (diff < 0) { deltaClass = 'delta-negative'; deltaText = '↓ ' + diff; }
+
+                    delta.className = 'comparison-delta ' + deltaClass;
+                    delta.textContent = deltaText;
+
+                    item.appendChild(label);
+                    item.appendChild(value);
+                    item.appendChild(delta);
+                    comparisonGrid.appendChild(item);
+                });
+            }
+
+            function exportPdf() {
+                if (!currentReport) {
+                    showToast('Нет данных для экспорта', '⚠️');
+                    return;
+                }
+                detailsContent.classList.add('open');
+                detailsArrow.classList.add('open');
+                document.querySelectorAll('.rec-tips').forEach(function (tips) {
+                    tips.classList.add('expanded');
+                });
+                setTimeout(function () {
+                    window.print();
+                }, 100);
+            }
+
+            /**
+             * ИСПРАВЛЕННАЯ ФУНКЦИЯ КОНФЕТТИ
+             * Гарантированно работает с проверкой canvas и контекста
+             */
+            function launchConfetti() {
+                console.log('🎉 Запуск конфетти...');
+
+                // Проверка canvas
+                if (!confettiCanvas) {
+                    console.error('Canvas не найден');
+                    return;
+                }
+
+                // Получаем контекст
+                var ctx = confettiCanvas.getContext('2d');
+                if (!ctx) {
+                    console.error('Не удалось получить 2D контекст');
+                    return;
+                }
+
+                // Устанавливаем размеры canvas
+                confettiCanvas.width = window.innerWidth;
+                confettiCanvas.height = window.innerHeight;
+
+                if (confettiCanvas.width === 0 || confettiCanvas.height === 0) {
+                    console.error('Canvas имеет нулевые размеры');
+                    return;
+                }
+
+                console.log('Canvas размер:', confettiCanvas.width, 'x', confettiCanvas.height);
+
+                var colors = ['#6366f1', '#ec4899', '#10b981', '#f59e0b', '#3b82f6', '#8b5cf6'];
+                var particles = [];
+                var PARTICLE_COUNT = 150;
+
+                // Создаём частицы
+                for (var i = 0; i < PARTICLE_COUNT; i++) {
+                    particles.push({
+                        x: Math.random() * confettiCanvas.width,
+                        y: -20 - Math.random() * 200,
+                        vx: (Math.random() - 0.5) * 4,
+                        vy: Math.random() * 3 + 2,
+                        size: Math.random() * 8 + 4,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        rotation: Math.random() * Math.PI * 2,
+                        rotationSpeed: (Math.random() - 0.5) * 0.2,
+                        shape: Math.random() > 0.5 ? 'circle' : 'rect',
+                        opacity: 1
+                    });
+                }
+
+                var startTime = Date.now();
+                var animationId = null;
+
+                function animate() {
+                    var elapsed = Date.now() - startTime;
+
+                    if (elapsed > 4000) {
+                        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                        if (animationId) cancelAnimationFrame(animationId);
+                        console.log('Конфетти завершено');
+                        return;
+                    }
+
+                    ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+                    for (var j = 0; j < particles.length; j++) {
+                        var p = particles[j];
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vy += 0.1;
+                        p.rotation += p.rotationSpeed;
+
+                        if (elapsed > 3000) {
+                            p.opacity = Math.max(0, 1 - (elapsed - 3000) / 1000);
+                        }
+
+                        ctx.save();
+                        ctx.globalAlpha = p.opacity;
+                        ctx.translate(p.x, p.y);
+                        ctx.rotate(p.rotation);
+                        ctx.fillStyle = p.color;
+
+                        if (p.shape === 'circle') {
+                            ctx.beginPath();
+                            ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+                            ctx.fill();
+                        } else {
+                            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                        }
+
+                        ctx.restore();
+                    }
+
+                    animationId = requestAnimationFrame(animate);
+                }
+
+                animate();
+            }
+
+            window.addEventListener('resize', function () {
+                if (confettiCanvas) {
+                    confettiCanvas.width = window.innerWidth;
+                    confettiCanvas.height = window.innerHeight;
+                }
+            });
+
+            function initRadarStructure() {
+                if (radarStructureInitialized) return;
+                if (!radarChart) return;
+
+                var defs = radarChart.querySelector('defs');
+                clearElement(radarChart);
+                if (defs) radarChart.appendChild(defs);
+
+                var cx = 200, cy = 200;
+                var maxRadius = 130;
+                var levels = 4;
+                var n = REQUIRED_SUBSECTIONS.length;
+                var angleStep = (Math.PI * 2) / n;
+
+                for (var level = 1; level <= levels; level++) {
+                    var r = (maxRadius / levels) * level;
+                    var points = '';
+                    for (var i = 0; i < n; i++) {
+                        var angle = angleStep * i - Math.PI / 2;
+                        var x = cx + r * Math.cos(angle);
+                        var y = cy + r * Math.sin(angle);
+                        points += x + ',' + y + ' ';
+                    }
+                    var polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                    polygon.setAttribute('points', points.trim());
+                    polygon.setAttribute('class', 'radar-axis');
+                    radarChart.appendChild(polygon);
+                }
+
+                for (var i = 0; i < n; i++) {
+                    var angle = angleStep * i - Math.PI / 2;
+                    var x = cx + maxRadius * Math.cos(angle);
+                    var y = cy + maxRadius * Math.sin(angle);
+                    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', cx);
+                    line.setAttribute('y1', cy);
+                    line.setAttribute('x2', x);
+                    line.setAttribute('y2', y);
+                    line.setAttribute('class', 'radar-axis-line');
+                    radarChart.appendChild(line);
+                }
+
+                REQUIRED_SUBSECTIONS.forEach(function (name, i) {
+                    var angle = angleStep * i - Math.PI / 2;
+                    var labelRadius = maxRadius + 25;
+                    var x = cx + labelRadius * Math.cos(angle);
+                    var y = cy + labelRadius * Math.sin(angle);
+                    var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', x);
+                    text.setAttribute('y', y);
+                    text.setAttribute('class', 'radar-label');
+                    text.setAttribute('dominant-baseline', 'middle');
+                    text.textContent = getShortName(name);
+                    radarChart.appendChild(text);
+                });
+
+                radarStructureInitialized = true;
+            }
+
+            function updateRadarData(subsections) {
+                if (!radarChart) return;
+                var dynamic = radarChart.querySelectorAll('.radar-area, .radar-point');
+                dynamic.forEach(function (el) { el.remove(); });
+
+                var cx = 200, cy = 200;
+                var maxRadius = 130;
+                var n = subsections.length;
+                var angleStep = (Math.PI * 2) / n;
+                var dataPoints = '';
+
+                subsections.forEach(function (sub, i) {
+                    var angle = angleStep * i - Math.PI / 2;
+                    var value = sub.found ? 1 : 0.15;
+                    var r = maxRadius * value;
+                    var x = cx + r * Math.cos(angle);
+                    var y = cy + r * Math.sin(angle);
+                    dataPoints += x + ',' + y + ' ';
+
+                    var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', x);
+                    circle.setAttribute('cy', y);
+                    circle.setAttribute('r', 5);
+                    circle.setAttribute('class', 'radar-point');
+                    radarChart.appendChild(circle);
+                });
+
+                var area = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                area.setAttribute('points', dataPoints.trim());
+                area.setAttribute('class', 'radar-area');
+                var firstPoint = radarChart.querySelector('.radar-point');
+                if (firstPoint) {
+                    radarChart.insertBefore(area, firstPoint);
+                } else {
+                    radarChart.appendChild(area);
+                }
+
+                var foundCount = subsections.filter(function (s) { return s.found; }).length;
+                if (radarBadge) radarBadge.textContent = foundCount + ' из 11';
+            }
+
+            function renderRadarChart(subsections) {
+                initRadarStructure();
+                updateRadarData(subsections);
+            }
+
+            function getShortName(name) {
+                var map = {
+                    'Основные сведения': 'Основные',
+                    'Структура и органы управления образовательной организацией': 'Структура',
+                    'Документы': 'Документы',
+                    'Образование': 'Образование',
+                    'Руководство. Педагогический (научно-педагогический) состав': 'Педагоги',
+                    'Материально-техническое обеспечение и оснащенность образовательного процесса': 'МТО',
+                    'Платные образовательные услуги': 'Платные',
+                    'Финансово-хозяйственная деятельность': 'Финансы',
+                    'Вакантные места для приема (перевода) обучающихся': 'Места',
+                    'Доступная среда': 'Среда',
+                    'Международное сотрудничество': 'Межд.'
+                };
+                return map[name] || name.substring(0, 10);
+            }
+
+            async function fetchSiteContent(url) {
+                var proxies = [
+                    'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+                    'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url),
+                    'https://corsproxy.io/?' + encodeURIComponent(url)
+                ];
+
+                for (var p = 0; p < proxies.length; p++) {
+                    var proxy = proxies[p];
+                    try {
+                        var controller = new AbortController();
+                        var timeoutId = setTimeout(function () { controller.abort(); }, 15000);
+                        var response = await fetch(proxy, {
+                            signal: controller.signal,
+                            headers: { 'Accept': 'text/html' }
+                        });
+                        clearTimeout(timeoutId);
+                        if (response.ok) {
+                            var html = await response.text();
+                            if (html.length > 100) return html;
+                        }
+                    } catch (err) {
+                        console.warn('Прокси не сработал:', proxy);
+                    }
+                }
+                throw new Error('Не удалось загрузить сайт. Попробуйте позже.');
+            }
+
+            function findInHtml(html, terms) {
+                var lower = html.toLowerCase();
+                for (var i = 0; i < terms.length; i++) {
+                    if (lower.indexOf(terms[i].toLowerCase()) !== -1) return true;
+                }
+                return false;
+            }
+
+            function findInDom(doc, terms) {
+                var links = doc.querySelectorAll('a');
+                for (var i = 0; i < links.length; i++) {
+                    var link = links[i];
+                    var text = (link.textContent || '').toLowerCase();
+                    var href = (link.getAttribute('href') || '').toLowerCase();
+                    for (var j = 0; j < terms.length; j++) {
+                        var term = terms[j].toLowerCase();
+                        if (text.indexOf(term) !== -1 || href.indexOf(term) !== -1) {
+                            return { found: true, comment: 'Найдено в меню' };
+                        }
+                    }
+                }
+                return { found: false, comment: 'Не найдено' };
+            }
+
+            function checkSubsection(html, doc, name, aliases) {
+                var terms = [name].concat(aliases);
+                if (findInHtml(html, terms)) return { found: true, comment: 'Найдено на сайте' };
+                var domResult = findInDom(doc, terms);
+                if (domResult.found) return domResult;
+
+                var keywords = name.split(' ').filter(function (w) { return w.length > 3; });
+                var lower = html.toLowerCase();
+                var matches = 0;
+                for (var i = 0; i < keywords.length; i++) {
+                    if (lower.indexOf(keywords[i].toLowerCase()) !== -1) matches++;
+                }
+                if (matches >= Math.ceil(keywords.length / 2)) {
+                    return { found: true, comment: 'Частичное совпадение' };
+                }
+                return { found: false, comment: 'Не найдено' };
+            }
+
+            function analyzeSite(html, url) {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(html, 'text/html');
+
+                var sectionFound = findInHtml(html, ['сведения об образовательной организации', 'сведения об оо']);
+
+                var subsections = REQUIRED_SUBSECTIONS.map(function (name) {
+                    var aliases = SUBSECTION_ALIASES[name] || [];
+                    var result = checkSubsection(html, doc, name, aliases);
+                    return { name: name, found: result.found, comment: result.comment };
+                });
+
+                var visionFound = findInHtml(html, ['версия для слабовидящих', 'для слабовидящих']);
+
+                var tablesCount = doc.querySelectorAll('table').length;
+                var documentsCount = doc.querySelectorAll('a[href$=".pdf"], a[href$=".doc"], a[href$=".docx"]').length;
+                var linksCount = doc.querySelectorAll('a[href]').length;
+                var imagesCount = doc.querySelectorAll('img[src]').length;
+
+                var foundCount = subsections.filter(function (s) { return s.found; }).length;
+                var status = getStatusText(foundCount);
+
+                var recommendations = [];
+                if (!sectionFound) {
+                    recommendations.push({
+                        type: 'critical',
+                        title: 'Раздел "Сведения об образовательной организации" не найден',
+                        description: 'Обязательный раздел отсутствует',
+                        tips: ['Создайте раздел в главном меню', 'Разместите все 11 подразделов'],
+                        icon: '🚨'
+                    });
+                }
+
+                subsections.forEach(function (s) {
+                    if (!s.found) {
+                        var details = RECOMMENDATIONS_DETAILS[s.name];
+                        recommendations.push({
+                            type: 'error',
+                            title: 'Подраздел "' + s.name + '" не найден',
+                            description: 'Обязательный подраздел отсутствует на сайте',
+                            tips: details ? details.tips : ['Добавьте подраздел'],
+                            icon: '❌'
+                        });
+                    }
+                });
+
+                if (!visionFound) {
+                    recommendations.push({
+                        type: 'critical',
+                        title: 'Версия для слабовидящих не найдена',
+                        description: 'Обязательное требование',
+                        tips: ['Добавьте ссылку "Версия для слабовидящих"', 'Обеспечьте увеличенный шрифт', 'Используйте контрастные цвета'],
+                        icon: '👁️'
+                    });
+                }
+
+                if (recommendations.length === 0) {
+                    recommendations.push({
+                        type: 'success',
+                        title: 'Все требования выполнены!',
+                        description: 'Сайт соответствует Приказу № 831',
+                        tips: ['Продолжайте поддерживать актуальность', 'Регулярно обновляйте документы'],
+                        icon: '🎉'
+                    });
+                }
+
+                return {
+                    sectionFound: sectionFound,
+                    visionFound: visionFound,
+                    subsections: subsections,
+                    foundCount: foundCount,
+                    status: status,
+                    recommendations: recommendations,
+                    contentDetails: {
+                        tablesCount: tablesCount,
+                        documentsCount: documentsCount,
+                        linksCount: linksCount,
+                        imagesCount: imagesCount
+                    },
+                    url: url,
+                    timestamp: new Date().toLocaleString('ru-RU')
+                };
+            }
+
+            function animateProgressRing(percent) {
+                if (!progressRingFill) return;
+                var circumference = 2 * Math.PI * 54;
+                var offset = circumference - (percent / 100) * circumference;
+                progressRingFill.style.strokeDashoffset = offset;
+
+                var current = 0;
+                var target = Math.round(percent);
+                if (target === 0) {
+                    if (progressValue) progressValue.textContent = '0%';
+                    return;
+                }
+                var stepTime = 1500 / target;
+
+                var timer = setInterval(function () {
+                    current++;
+                    if (progressValue) progressValue.textContent = current + '%';
+                    if (current >= target) clearInterval(timer);
+                }, stepTime);
+            }
+
+            /**
+             * ГЛАВНАЯ ФУНКЦИЯ ОТРИСОВКИ
+             * С обработкой ошибок и гарантированным отображением
+             */
+            function renderReport(report) {
+                console.log('📊 renderReport вызван', report);
+
+                if (!report) {
+                    console.error('renderReport: report is null!');
+                    return;
+                }
+
+                try {
+                    currentReport = report;
+
+                    // Показываем секцию результатов
+                    if (resultSection) {
+                        resultSection.classList.add('visible');
+                    }
+
+                    // Обновляем заголовок статуса
+                    if (summaryTitle) summaryTitle.textContent = report.status.text;
+                    if (statusSub) statusSub.textContent = 'Найдено подразделов: ' + report.foundCount + ' из 11';
+
+                    // Обновляем бейдж версии для слабовидящих
+                    if (visionBadge) {
+                        clearElement(visionBadge);
+                        var eyeText = document.createTextNode('👁️ ');
+                        visionBadge.appendChild(eyeText);
+                        var visionSpan = document.createElement('span');
+                        visionSpan.textContent = 'Версия для слабовидящих: ' + (report.visionFound ? '✅ Есть' : '❌ Нет');
+                        visionBadge.appendChild(visionSpan);
+                    }
+
+                    // Круговая диаграмма
+                    var percent = (report.foundCount / 11) * 100;
+                    animateProgressRing(percent);
+
+                    // Radar Chart
+                    try {
+                        renderRadarChart(report.subsections);
+                    } catch (err) {
+                        console.error('Ошибка в renderRadarChart:', err);
+                    }
+
+                    // Сравнение с предыдущей проверкой
+                    try {
+                        var previousReport = findPreviousCheck(report.url);
+                        renderComparison(report, previousReport);
+                    } catch (err) {
+                        console.error('Ошибка в renderComparison:', err);
+                    }
+
+                    // ДЕТАЛИ - гарантированное заполнение
+                    console.log('📋 Заполнение деталей...');
+                    if (detailsBody) {
+                        clearElement(detailsBody);
+                        var details = [
+                            { label: 'URL сайта', value: report.url },
+                            { label: 'Дата и время проверки', value: report.timestamp },
+                            { label: 'Общий статус', value: report.status.text },
+                            { label: 'Основной раздел', value: report.sectionFound ? '✅ Найден' : '❌ Не найден' },
+                            { label: 'Версия для слабовидящих', value: report.visionFound ? '✅ Есть' : '❌ Нет' },
+                            { label: 'Найдено подразделов', value: report.foundCount + ' из 11' },
+                            { label: 'Таблиц на сайте', value: (report.contentDetails.tablesCount || 0) + ' шт.' },
+                            { label: 'Документов (PDF/DOC)', value: (report.contentDetails.documentsCount || 0) + ' шт.' },
+                            { label: 'Всего ссылок', value: (report.contentDetails.linksCount || 0) + ' шт.' },
+                            { label: 'Изображений', value: (report.contentDetails.imagesCount || 0) + ' шт.' }
+                        ];
+
+                        details.forEach(function (d) {
+                            var row = document.createElement('div');
+                            row.className = 'detail-row';
+
+                            var label = document.createElement('span');
+                            label.className = 'detail-label';
+                            label.textContent = d.label;
+
+                            var value = document.createElement('span');
+                            value.className = 'detail-value';
+                            value.textContent = d.value;
+
+                            row.appendChild(label);
+                            row.appendChild(value);
+                            detailsBody.appendChild(row);
+                        });
+
+                        console.log('✅ Детали заполнены:', details.length, 'строк');
+
+                        // Автоматически раскрываем детали при первой проверке
+                        if (detailsContent && !detailsContent.classList.contains('open')) {
+                            detailsContent.classList.add('open');
+                            if (detailsArrow) detailsArrow.classList.add('open');
+                            if (detailsToggle) detailsToggle.setAttribute('aria-expanded', 'true');
+                        }
+                    } else {
+                        console.error('detailsBody не найден!');
+                    }
+
+                    // ПОДРАЗДЕЛЫ - гарантированное заполнение
+                    console.log('📋 Заполнение подразделов...');
+                    if (subsectionsList) {
+                        clearElement(subsectionsList);
+
+                        report.subsections.forEach(function (s) {
+                            var li = document.createElement('li');
+                            var statusClass = 'not-found';
+                            if (s.found) {
+                                statusClass = s.comment.indexOf('Частичное') !== -1 ? 'partial' : 'found';
+                            }
+                            li.className = 'subsection-item ' + statusClass;
+
+                            var left = document.createElement('div');
+                            left.className = 'subsection-left';
+
+                            var icon = document.createElement('div');
+                            icon.className = 'subsection-icon';
+                            icon.textContent = SUBSECTION_ICONS[s.name] || '📌';
+
+                            var name = document.createElement('span');
+                            name.className = 'subsection-name';
+                            name.textContent = s.name;
+
+                            left.appendChild(icon);
+                            left.appendChild(name);
+
+                            var comment = document.createElement('span');
+                            var commentClass = 'status-not-found';
+                            var commentText = '❌ Не найдено';
+                            if (s.found) {
+                                if (s.comment.indexOf('Частичное') !== -1) {
+                                    commentClass = 'status-partial';
+                                    commentText = '⚠️ ' + s.comment;
+                                } else {
+                                    commentClass = 'status-found';
+                                    commentText = '✅ ' + s.comment;
+                                }
+                            }
+                            comment.className = 'subsection-comment ' + commentClass;
+                            comment.textContent = commentText;
+
+                            li.appendChild(left);
+                            li.appendChild(comment);
+                            subsectionsList.appendChild(li);
+                        });
+
+                        console.log('✅ Подразделы заполнены:', report.subsections.length);
+                    } else {
+                        console.error('subsectionsList не найден!');
+                    }
+
+                    // РЕКОМЕНДАЦИИ - гарантированное заполнение
+                    console.log('💡 Заполнение рекомендаций...');
+                    if (recommendationsList) {
+                        clearElement(recommendationsList);
+                        if (recCount) recCount.textContent = report.recommendations.length;
+
+                        report.recommendations.forEach(function (r) {
+                            var div = document.createElement('div');
+                            div.className = 'recommendation-item rec-' + r.type;
+
+                            var header = document.createElement('div');
+                            header.className = 'rec-header';
+
+                            var icon = document.createElement('span');
+                            icon.className = 'rec-icon';
+                            icon.textContent = r.icon || '💡';
+
+                            var content = document.createElement('div');
+                            content.style.flex = '1';
+
+                            var title = document.createElement('div');
+                            title.className = 'rec-title';
+                            title.textContent = r.title;
+
+                            var desc = document.createElement('div');
+                            desc.className = 'rec-description';
+                            desc.textContent = r.description;
+
+                            content.appendChild(title);
+                            content.appendChild(desc);
+
+                            if (r.tips && r.tips.length > 0) {
+                                var toggle = document.createElement('span');
+                                toggle.className = 'rec-toggle';
+                                toggle.textContent = '▶ Подробнее (' + r.tips.length + ' советов)';
+                                toggle.setAttribute('role', 'button');
+                                toggle.setAttribute('tabindex', '0');
+
+                                var tipsList = document.createElement('ul');
+                                tipsList.className = 'rec-tips';
+                                r.tips.forEach(function (tip) {
+                                    var li = document.createElement('li');
+                                    li.textContent = tip;
+                                    tipsList.appendChild(li);
+                                });
+
+                                toggle.addEventListener('click', function () {
+                                    var expanded = tipsList.classList.toggle('expanded');
+                                    toggle.textContent = expanded ? '▼ Скрыть' : '▶ Подробнее (' + r.tips.length + ' советов)';
+                                });
+
+                                toggle.addEventListener('keydown', function (e) {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        toggle.click();
+                                    }
+                                });
+
+                                content.appendChild(toggle);
+                                content.appendChild(tipsList);
+                            }
+
+                            header.appendChild(icon);
+                            header.appendChild(content);
+                            div.appendChild(header);
+                            recommendationsList.appendChild(div);
+                        });
+
+                        console.log('✅ Рекомендации заполнены:', report.recommendations.length);
+                    } else {
+                        console.error('recommendationsList не найден!');
+                    }
+
+                    // Сохраняем в историю
+                    saveToHistory(report);
+                    renderHistory();
+
+                    // Конфетти при 100%
+                    if (report.foundCount === 11) {
+                        launchConfetti();
+                        showToast('Поздравляем! Полное соответствие!', '🎉');
+                    } else {
+                        showToast('Проверка завершена', '✅');
+                    }
+
+                    // Прокрутка к результатам
+                    setTimeout(function () {
+                        if (resultSection) {
+                            resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                    }, 100);
+
+                    console.log('✅ renderReport завершён успешно');
+
+                } catch (err) {
+                    console.error('❌ Ошибка в renderReport:', err);
+                    showToast('Ошибка при отображении отчёта: ' + err.message, '❌');
+                }
+            }
+
+            function saveToHistory(report) {
+                var entry = {
+                    url: report.url,
+                    foundCount: report.foundCount,
+                    status: report.status.text,
+                    timestamp: report.timestamp,
+                    vision: report.visionFound,
+                    sectionFound: report.sectionFound,
+                    subsections: report.subsections,
+                    isDemo: report.isDemo || false
+                };
+
+                var exists = history.some(function (h) {
+                    return h.url === entry.url && h.timestamp === entry.timestamp;
+                });
+
+                if (!exists) {
+                    history.unshift(entry);
+                    if (history.length > 50) history.pop();
+                    try {
+                        localStorage.setItem('inspectorHistory', JSON.stringify(history));
+                    } catch (e) { }
+                }
+            }
+
+            function renderHistory() {
+                var filter = historyFilter.value;
+                var filtered = filter === 'all' ? history : history.filter(function (h) {
+                    return h.status.indexOf(filter) !== -1;
+                });
+
+                clearElement(historyList);
+                if (historyEmpty) historyEmpty.style.display = filtered.length === 0 ? 'block' : 'none';
+                if (historyCount) historyCount.textContent = history.length;
+
+                filtered.forEach(function (h) {
+                    var div = document.createElement('div');
+                    div.className = 'history-item';
+
+                    var left = document.createElement('div');
+                    left.className = 'history-left';
+
+                    var status = document.createElement('span');
+                    status.className = 'history-status';
+                    status.textContent = h.status.split(' ')[0];
+
+                    var url = document.createElement('span');
+                    url.className = 'history-url';
+                    url.textContent = h.url.replace(/^https?:\/\//, '');
+
+                    var badge = document.createElement('span');
+                    badge.className = 'history-badge';
+                    badge.textContent = h.foundCount + '/11';
+
+                    left.appendChild(status);
+                    left.appendChild(url);
+                    left.appendChild(badge);
+
+                    if (h.isDemo) {
+                        var demoBadge = document.createElement('span');
+                        demoBadge.className = 'history-badge';
+                        demoBadge.style.background = 'rgba(99, 102, 241, 0.1)';
+                        demoBadge.style.color = 'var(--primary)';
+                        demoBadge.textContent = 'демо';
+                        left.appendChild(demoBadge);
+                    }
+
+                    var time = document.createElement('span');
+                    time.className = 'history-time';
+                    time.textContent = h.timestamp;
+
+                    div.appendChild(left);
+                    div.appendChild(time);
+                    historyList.appendChild(div);
+                });
+            }
+
+            function getDemoReport(url) {
+                var subsections = REQUIRED_SUBSECTIONS.map(function (name, i) {
+                    return {
+                        name: name,
+                        found: i !== 2 && i !== 7,
+                        comment: i === 2 || i === 7 ? 'Не найдено' : 'Найдено'
+                    };
+                });
+
+                return {
+                    sectionFound: true,
+                    visionFound: true,
+                    subsections: subsections,
+                    foundCount: 9,
+                    status: getStatusText(9),
+                    recommendations: [
+                        { type: 'warning', title: 'Демо-режим', description: 'Для реальной проверки введите URL', tips: [], icon: '🔍' },
+                        { type: 'error', title: 'Подраздел "Документы" не найден', description: 'Обязательный подраздел отсутствует', tips: RECOMMENDATIONS_DETAILS['Документы'].tips, icon: '❌' },
+                        { type: 'error', title: 'Подраздел "Финансово-хозяйственная деятельность" не найден', description: 'Обязательный подраздел отсутствует', tips: RECOMMENDATIONS_DETAILS['Финансово-хозяйственная деятельность'].tips, icon: '❌' }
+                    ],
+                    contentDetails: { tablesCount: 5, documentsCount: 12, linksCount: 150, imagesCount: 25 },
+                    url: url || 'Демо',
+                    timestamp: new Date().toLocaleString('ru-RU'),
+                    isDemo: true
+                };
+            }
+
+            function exportJson() {
+                if (!currentReport) {
+                    showToast('Нет данных для экспорта', '⚠️');
+                    return;
+                }
+                var blob = new Blob([JSON.stringify(currentReport, null, 2)], { type: 'application/json' });
+                var a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'report_' + Date.now() + '.json';
+                a.click();
+                URL.revokeObjectURL(a.href);
+                showToast('Отчёт экспортирован', '📄');
+            }
+
+            var loadingInterval = null;
+            var progressValueLoad = 0;
+
+            function showLoading() {
+                if (loadingModal) loadingModal.classList.add('visible');
+                progressValueLoad = 0;
+                if (progressFill) progressFill.style.width = '0%';
+
+                document.querySelectorAll('.step-icon').forEach(function (el) { el.className = 'step-icon'; });
+                var firstStep = document.querySelector('.step-icon[data-step="0"]');
+                if (firstStep) firstStep.classList.add('active');
+
+                loadingInterval = setInterval(function () {
+                    progressValueLoad += 4;
+                    if (progressValueLoad > 100) progressValueLoad = 100;
+                    if (progressFill) progressFill.style.width = progressValueLoad + '%';
+
+                    var step = Math.min(Math.floor(progressValueLoad / 25), 3);
+                    document.querySelectorAll('.step-icon').forEach(function (el, i) {
+                        el.className = 'step-icon';
+                        if (i < step) el.classList.add('done');
+                        if (i === step) el.classList.add('active');
+                    });
+
+                    if (progressValueLoad >= 100) {
+                        clearInterval(loadingInterval);
+                    }
+                }, 150);
+            }
+
+            function hideLoading() {
+                if (loadingModal) loadingModal.classList.remove('visible');
+                if (loadingInterval) clearInterval(loadingInterval);
+            }
+
+            async function runInspection() {
+                var url = urlInput.value.trim();
+                if (!url) {
+                    showToast('Введите URL', '⚠️');
+                    urlInput.focus();
+                    return;
+                }
+                try {
+                    new URL(url);
+                } catch (e) {
+                    showToast('Некорректный URL', '❌');
+                    urlInput.focus();
+                    return;
+                }
+
+                checkBtn.disabled = true;
+                demoBtn.disabled = true;
+                showLoading();
+                if (resultSection) resultSection.classList.remove('visible');
+
+                try {
+                    var html = await fetchSiteContent(url);
+                    var report = analyzeSite(html, url);
+
+                    setTimeout(function () {
+                        hideLoading();
+                        renderReport(report);
+                        statusMessage.textContent = '✅ Проверка завершена успешно';
+                    }, 500);
+                } catch (err) {
+                    hideLoading();
+                    showToast(err.message, '❌');
+                    statusMessage.textContent = '❌ Ошибка: ' + err.message;
+                } finally {
+                    checkBtn.disabled = false;
+                    demoBtn.disabled = false;
+                }
+            }
+
+            function runDemo() {
+                showLoading();
+                setTimeout(function () {
+                    var report = getDemoReport(urlInput.value || 'Демо');
+                    hideLoading();
+                    renderReport(report);
+                    showToast('Демо-проверка выполнена', '⚡');
+                }, 2000);
+            }
+
+            function clearHistory() {
+                if (confirm('Удалить всю историю проверок?')) {
+                    history = [];
+                    localStorage.removeItem('inspectorHistory');
+                    renderHistory();
+                    showToast('История очищена', '🗑️');
+                }
+            }
+
+            function toggleTheme() {
+                darkMode = !darkMode;
+                document.body.classList.toggle('dark', darkMode);
+                clearElement(toggleThemeBtn);
+                var icon = document.createTextNode(darkMode ? '☀️ ' : '🌙 ');
+                toggleThemeBtn.appendChild(icon);
+                var text = document.createElement('span');
+                text.textContent = 'Тема';
+                toggleThemeBtn.appendChild(text);
+                localStorage.setItem('inspectorTheme', darkMode ? 'dark' : 'light');
+            }
+
+            function toggleDetails() {
+                if (!detailsContent || !detailsArrow || !detailsToggle) return;
+                var isOpen = detailsContent.classList.toggle('open');
+                detailsArrow.classList.toggle('open', isOpen);
+                detailsToggle.setAttribute('aria-expanded', isOpen);
+            }
+
+            function init() {
+                console.log('🚀 Инициализация приложения...');
+
+                renderHistory();
+
+                if (localStorage.getItem('inspectorTheme') === 'dark') {
+                    darkMode = true;
+                    document.body.classList.add('dark');
+                    clearElement(toggleThemeBtn);
+                    var icon = document.createTextNode('☀️ ');
+                    toggleThemeBtn.appendChild(icon);
+                    var text = document.createElement('span');
+                    text.textContent = 'Тема';
+                    toggleThemeBtn.appendChild(text);
+                }
+
+                urlInput.addEventListener('input', function (e) {
+                    validateUrlRealtime(e.target.value);
+                });
+
+                if (urlInput.value) validateUrlRealtime(urlInput.value);
+
+                checkBtn.addEventListener('click', runInspection);
+                demoBtn.addEventListener('click', runDemo);
+                urlInput.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') runInspection();
+                });
+                historyFilter.addEventListener('change', renderHistory);
+                clearHistoryBtn.addEventListener('click', clearHistory);
+                exportJsonBtn.addEventListener('click', exportJson);
+                exportPdfBtn.addEventListener('click', exportPdf);
+                shareBtn.addEventListener('click', shareResult);
+                toggleThemeBtn.addEventListener('click', toggleTheme);
+                detailsToggle.addEventListener('click', toggleDetails);
+                detailsToggle.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleDetails();
+                    }
+                });
+
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && loadingModal.classList.contains('visible')) {
+                        hideLoading();
+                    }
+                });
+
+                var lastUrl = localStorage.getItem('lastUrl');
+                if (lastUrl) {
+                    urlInput.value = lastUrl;
+                    validateUrlRealtime(lastUrl);
+                }
+                urlInput.addEventListener('change', function () {
+                    localStorage.setItem('lastUrl', urlInput.value);
+                });
+
+                // Инициализация canvas для конфетти
+                if (confettiCanvas) {
+                    confettiCanvas.width = window.innerWidth;
+                    confettiCanvas.height = window.innerHeight;
+                    console.log('✅ Canvas инициализирован:', confettiCanvas.width, 'x', confettiCanvas.height);
+                }
+
+                console.log('✅ Инициализация завершена');
+            }
+
+            init();
+        })();
+    </script>
+</body>
+
+</html>
